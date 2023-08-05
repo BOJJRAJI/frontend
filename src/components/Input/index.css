@@ -1,0 +1,39 @@
+.header-input-container {
+  display: flex;
+  flex-direction: row;
+}
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-top: 20px;
+  background-color: #f3f4f6;
+}
+.select-element {
+  width: 200px;
+  padding: 7px;
+  background-color: transparent;
+}
+.add-discussion-button {
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  color: white;
+  background-color: blue;
+  margin-left: 10px;
+}
+
+.discussion-container {
+  margin-top: 20px;
+}
+.text-area-element {
+  padding: 3px;
+  background-color: transparent;
+  border-radius: 3px;
+  padding-top: 5px;
+}
+.date-time-input {
+  padding: 2px;
+  background-color: transparent;
+}

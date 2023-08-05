@@ -1,0 +1,52 @@
+.header-client-container {
+  display: flex;
+  flex-direction: row;
+}
+.clients-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-top: 20px;
+  background-color: #f3f4f6;
+}
+.add-client-button {
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  color: white;
+  background-color: blue;
+  margin-left: 10px;
+}
+
+@media (max-width: 575px) {
+  .header-container {
+    padding: 10px;
+  }
+}
+
+.add-client-container {
+  margin-top: 30px;
+}
+.name-input-container {
+  margin-top: 4px;
+}
+.name-label {
+  font-family: 'Roboto';
+  font-size: 18px;
+  text-align: left;
+}
+.name-input {
+  padding: 5px;
+
+  font-family: 'Roboto';
+  margin-bottom: 10px;
+}
+.add-button {
+  border: none;
+  background-color: lightseagreen;
+  color: white;
+  padding: 7px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
