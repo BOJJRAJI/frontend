@@ -9,6 +9,13 @@
   border-radius: 10px;
   padding: 40px;
   box-shadow: 0px 4px 16px 0px #e2e8f0;
+  width: 30%;
+}
+
+@media screen and (max-width: 576px) {
+  .login-form-container {
+    width: 70%;
+  }
 }
 .heading {
   font-family: 'Roboto';
@@ -33,6 +40,7 @@
   border: 1px solid #475569;
   padding: 10px;
   border-radius: 5px;
+  width: 100%;
 }
 .checkbox-container {
   display: flex;
@@ -55,8 +63,22 @@
   border: none;
   width: 100%;
 }
+.sign-in-submit-button {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border-radius: 7px;
+  padding: 10px;
+  border: none;
+  width: 100%;
+}
+.already-account-button {
+  background-color: transparent;
+  border: none;
+  font-size: 13px;
+}
 .error-msg {
   font-family: 'Roboto';
   color: #ff0b37;
   font-size: 13px;
+  width: 100%;
 }

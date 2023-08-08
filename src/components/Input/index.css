@@ -1,8 +1,8 @@
-.header-input-container {
+.projects-header-container {
   display: flex;
   flex-direction: row;
 }
-.input-container {
+.projects-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,30 +10,61 @@
   padding-top: 20px;
   background-color: #f3f4f6;
 }
-.select-element {
-  width: 200px;
-  padding: 7px;
-  background-color: transparent;
+.select-button-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-.add-discussion-button {
+.client-select-element {
+  width: 150px;
+  padding: 5px;
+  background-color: transparent;
+  margin-right: 10px;
+}
+.staff-select-element {
+  width: 150px;
+  padding: 5px;
+  background-color: transparent;
+  margin-right: 10px;
+}
+.add-project-button {
   border: none;
   padding: 7px;
   border-radius: 5px;
   color: white;
   background-color: blue;
   margin-left: 10px;
+  height: 40px;
+  margin-top: 45px;
 }
 
-.discussion-container {
-  margin-top: 20px;
+.add-projects-container {
+  text-align: center;
+  margin-right: 100px;
+  margin-top: 30px;
 }
-.text-area-element {
-  padding: 3px;
+.project-name {
   background-color: transparent;
-  border-radius: 3px;
-  padding-top: 5px;
+  padding: 5px;
+  margin-right: 140px;
 }
-.date-time-input {
-  padding: 2px;
+.project-description {
   background-color: transparent;
+  margin-top: 10px;
+}
+.add-button {
+  border: none;
+  background-color: lightseagreen;
+  color: white;
+  padding: 7px;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-align: left;
+  margin-right: 280px;
+}
+.error-msg {
+  font-family: 'Roboto';
+  color: #ff0b37;
+  font-size: 13px;
+  margin-right: 230px;
 }

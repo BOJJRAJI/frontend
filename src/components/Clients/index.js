@@ -1,176 +1,174 @@
 import {Component} from 'react'
+import {Link} from 'react-router-dom'
+import Loader from 'react-loader-spinner'
 import Header from '../Header'
 import './index.css'
 
+const apiStatusConstants = {
+  initial: 'INITIAL',
+  empty: 'EMPTY',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  inProgress: 'IN_PROGRESS',
+}
+
 class Clients extends Component {
-  state = {
-    isFormShow: false,
-    name: '',
-    email: '',
-    mobile: '',
-    clientId: '',
-    description: '',
-    isShowError: false,
+  state = {clientsDetails: [], apiStatus: apiStatusConstants.initial}
+
+  componentDidMount() {
+    this.getClientsDetails()
   }
 
-  getName = event => {
-    this.setState({name: event.target.value})
-  }
-
-  getEmail = event => {
-    this.setState({email: event.target.value})
-  }
-
-  getMobile = event => {
-    this.setState({mobile: event.target.value})
-  }
-
-  getDescription = event => {
-    this.setState({description: event.target.value})
-  }
-
-  getClientId = event => {
-    this.setState({clientId: event.target.value})
-  }
-
-  addClient = () => {
-    this.setState(prevState => ({isFormShow: !prevState.isFormShow}))
-  }
-
-  addClientToDb = () => {
-    const {name, email, mobile, clientId, description} = this.state
-
-    if (
-      name === '' ||
-      email === '' ||
-      mobile === '' ||
-      clientId === '' ||
-      description === ''
-    ) {
-      this.setState({isShowError: true})
+  getClientsDetails = async () => {
+    this.setState({apiStatus: apiStatusConstants.inProgress})
+    const res = await fetch('http://localhost:8005/clientsdata', {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+    })
+    console.log(res)
+    if (res.ok) {
+      const data = await res.json()
+      if (data.length === 0) {
+        this.setState({
+          apiStatus: apiStatusConstants.empty,
+        })
+      } else {
+        this.setState({
+          clientsDetails: data,
+          apiStatus: apiStatusConstants.success,
+        })
+      }
     } else {
-      const clientDetails = {name, email, mobile, clientId, description}
-      console.log(clientDetails)
       this.setState({
-        name: '',
-        email: '',
-        mobile: '',
-        clientId: '',
-        description: '',
-        isShowError: false,
+        apiStatus: apiStatusConstants.failure,
       })
     }
   }
 
-  renderAddClient = () => {
-    const {name, email, mobile, clientId, description, isShowError} = this.state
+  renderClientsListView = () => {
+    const {clientsDetails} = this.state
     return (
-      <div className="add-client-container">
-        <div className="name-input-container">
-          <label htmlFor="id" className="name-label">
-            Client ID:
-          </label>
-          <br />
-          <input
-            id="id"
-            type="text"
-            placeholder="ClientId"
-            className="name-input"
-            value={clientId}
-            onChange={this.getClientId}
-          />
-        </div>
-        <div className="name-input-container">
-          <label htmlFor="firstname" className="name-label">
-            Full Name:
-          </label>
-          <br />
-          <input
-            id="firstname"
-            type="text"
-            placeholder="Fullname"
-            className="name-input"
-            value={name}
-            onChange={this.getName}
-          />
-        </div>
-        <div className="name-input-container">
-          <label htmlFor="email" className="name-label">
-            Email Id:
-          </label>
-          <br />
-          <input
-            id="email"
-            type="text"
-            placeholder="EmailId"
-            className="name-input"
-            value={email}
-            onChange={this.getEmail}
-          />
-        </div>
-        <div className="name-input-container">
-          <label htmlFor="mobile" className="name-label" placeholder="Emailid">
-            Phone No:
-          </label>
-          <br />
-          <input
-            id="mobile"
-            type="text"
-            className="name-input"
-            placeholder="Phoneno"
-            value={mobile}
-            onChange={this.getMobile}
-          />
-        </div>
-
-        <div className="name-input-container">
-          <label
-            htmlFor="Description"
-            className="name-label"
-            placeholder="Emailid"
+      <div className="staff-view-container">
+        <div className="button-container">
+          <button
+            className="no-staff-button"
+            type="button"
+            onClick={this.addStaffButton}
           >
-            Description
-          </label>
-          <br />
-          <input
-            id="Description"
-            type="text"
-            className="name-input"
-            placeholder="Description"
-            value={description}
-            onChange={this.getDescription}
-          />
+            Add Client
+          </button>
         </div>
-        {isShowError && <p className="error-msg">* Fill The All Fields</p>}
-        <button
-          className="add-button"
-          type="button"
-          onClick={this.addClientToDb}
-        >
-          Add
-        </button>
+        <table className="clients-table">
+          <thead>
+            <tr className="table-row">
+              <th scope="col" className="clients-table-row-content-id">
+                ClientId
+              </th>
+              <th scope="col" className="table-row-content">
+                Name
+              </th>
+              <th scope="col" className="table-row-content">
+                Email
+              </th>
+              <th scope="col" className="table-row-content">
+                Mobile
+              </th>
+              <th scope="col" className="table-row-content">
+                Description
+              </th>
+              <th scope="col" className="table-row-content">
+                Address
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {clientsDetails.map(element => (
+              <>
+                <tr>
+                  <th scope="row" className="td">
+                    {element.clientId}
+                  </th>
+                  <td className="table-column">{element.name}</td>
+                  <td className="table-column">{element.email}</td>
+                  <td className="table-column">{element.mobile}</td>
+                  <td className="table-column">{element.description}</td>
+                  <td className="table-column">{element.address}</td>
+                  <td className="edit-button-container">
+                    <Link to={`/editclient/${element.clientId}`}>
+                      <button className="edit-button" type="button">
+                        Edit
+                      </button>
+                    </Link>
+                  </td>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </table>
       </div>
     )
   }
 
+  renderFailureView = () => (
+    <div className="staff-error-view-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-error-view.png"
+        alt="all-products-error"
+        className="staff-failure-img"
+      />
+      <h1 className="staff-failure-heading-text">Oops! Something Went Wrong</h1>
+      <p className="staff-failure-description">
+        We are having some trouble processing your request. Please try again.
+      </p>
+    </div>
+  )
+
+  renderLoadingView = () => (
+    <div className="products-loader-container">
+      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+    </div>
+  )
+
+  renderClientsView = () => {
+    const {apiStatus} = this.state
+
+    switch (apiStatus) {
+      case apiStatusConstants.success:
+        return this.renderClientsListView()
+      case apiStatusConstants.failure:
+        return this.renderFailureView()
+      case apiStatusConstants.inProgress:
+        return this.renderLoadingView()
+      case apiStatusConstants.empty:
+        return this.renderNoStaffView()
+      default:
+        return null
+    }
+  }
+
+  addStaffButton = () => {
+    const {history} = this.props
+    history.replace('/addclient')
+  }
+
+  renderNoStaffView = () => (
+    <div className="no-staff-container">
+      <h1 className="no-staff-heading">No Clients Present</h1>
+      <button
+        className="no-staff-button"
+        type="button"
+        onClick={this.addStaffButton}
+      >
+        Add Client
+      </button>
+    </div>
+  )
+
   render() {
-    const {isFormShow} = this.state
-
     return (
-      <div className="header-client-container">
+      <div className="staff-header-main-container">
         <Header />
-        <div className="clients-container">
-          <h1>Client</h1>
-          <button
-            className="add-client-button"
-            type="button"
-            onClick={this.addClient}
-          >
-            Add Client
-          </button>
-
-          {isFormShow && this.renderAddClient()}
-        </div>
+        {this.renderClientsView()}
       </div>
     )
   }

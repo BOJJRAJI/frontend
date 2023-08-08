@@ -23,7 +23,7 @@ const Header = () => (
 
       <Link to="/input" className="link">
         <AiOutlineFileAdd className="icon" />
-        <p className="text">Input</p>
+        <p className="text">Discussions</p>
       </Link>
       <Link to="/projects" className="link">
         <GoProjectRoadmap className="icon" />

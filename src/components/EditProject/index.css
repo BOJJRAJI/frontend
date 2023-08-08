@@ -1,44 +1,32 @@
-.staff-header-container {
-  display: flex;
-  flex-direction: row;
-}
-.staff-container {
+.edit-project-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-top: 20px;
+  padding-top: 10px;
   background-color: #f3f4f6;
 }
-.label-name-container {
-  margin-top: 4px;
+.name-input-container {
+  margin-top: 10px;
 }
-.name-label {
+.label {
   font-family: 'Roboto';
   font-size: 18px;
   text-align: left;
 }
-.name-input {
+.input {
   padding: 5px;
 
   font-family: 'Roboto';
   margin-bottom: 10px;
 }
-.add-button {
-  border: none;
-  background-color: lightseagreen;
-  color: white;
-  padding: 7px;
-  border-radius: 5px;
-  margin-top: 10px;
+.project-edit-heading {
+  text-align: left;
+  margin-right: 150px;
 }
-.error-msg {
-  font-family: 'Roboto';
-  color: #ff0b37;
-  font-size: 13px;
-}
+
 @media screen and (max-width: 576px) {
-  .staff-container {
+  .edit-project-container {
     display: flex;
     flex-direction: column;
 

@@ -2,53 +2,19 @@ import {Component} from 'react'
 import Header from '../Header'
 import './index.css'
 
-class EditStaff extends Component {
+class AddStaff extends Component {
   state = {
     name: '',
     email: '',
     mobile: '',
-    empId: '',
+    clientId: '',
     description: '',
     address: '',
     isShowError: false,
   }
 
-  componentDidMount() {
-    this.getEmployeeDetails()
-  }
-
-  getEmployeeDetails = async () => {
-    const {match} = this.props
-    const {params} = match
-    const {id} = params
-    console.log(params)
-    const projectsResponce = await fetch(
-      `http://localhost:8005/staffdata/${id}`,
-      {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-      },
-    )
-
-    if (projectsResponce.ok) {
-      const data = await projectsResponce.json()
-      this.setState({
-        empId: data.empId,
-        name: data.name,
-        email: data.email,
-        mobile: data.mobile,
-        description: data.description,
-        address: data.address,
-      })
-    }
-  }
-
   getName = event => {
     this.setState({name: event.target.value})
-  }
-
-  getAddress = event => {
-    this.setState({address: event.target.value})
   }
 
   getEmail = event => {
@@ -59,58 +25,60 @@ class EditStaff extends Component {
     this.setState({mobile: event.target.value})
   }
 
+  getAddress = event => {
+    this.setState({address: event.target.value})
+  }
+
   getDescription = event => {
     this.setState({description: event.target.value})
   }
 
-  getEmpId = () => {
-    const {match} = this.props
-    const {params} = match
-    const {id} = params
-    this.setState({empId: id})
+  getEmpId = event => {
+    this.setState({clientId: event.target.value})
   }
 
   addStaff = async event => {
     event.preventDefault()
-    const {name, email, empId, description, mobile, address} = this.state
+    const {name, email, clientId, description, mobile, address} = this.state
+    console.log(typeof clientId)
     if (
       name === '' ||
       email === '' ||
-      empId === '' ||
+      clientId === '' ||
       description === '' ||
-      mobile === ''
+      mobile === '' ||
+      address === ''
     ) {
       this.setState({isShowError: true})
     } else {
-      const res = await fetch(`http://localhost:8005/updatestaff/${empId}`, {
-        method: 'PUT',
+      const res = await fetch('http://localhost:8005/addclient', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name,
           email,
-          mobile,
+          clientId,
           description,
+          mobile,
           address,
         }),
       })
-
-      console.log(res.ok)
-
       if (res.ok) {
-        alert('Successfully edited')
+        alert('Successfully Added')
         const {history} = this.props
-        history.replace('/staff')
+        history.replace('/clients')
       } else {
-        alert('Something Went Wrong...')
+        alert('Somthing Went Wrong .. Try Again')
       }
+
       this.setState({
         name: '',
         email: '',
         mobile: '',
         description: '',
-        empId: '',
+        clientId: '',
         address: '',
         isShowError: '',
       })
@@ -122,28 +90,30 @@ class EditStaff extends Component {
       name,
       email,
       mobile,
-      empId,
+      clientId,
       description,
       isShowError,
       address,
     } = this.state
+
     return (
       <div className="staff-header-container">
         <Header />
         <div className="staff-container">
           <form onSubmit={this.addStaff}>
-            <h1>Edit Staff</h1>
+            <h1 className="project-edit-heading">Add Client</h1>
             <div className="label-name-container">
               <label htmlFor="empId" className="name-label">
-                Employee Id:
+                Client Id:
               </label>
               <br />
               <input
                 id="empId"
                 type="text"
-                placeholder="EmpId"
+                placeholder="ClientId"
                 className="name-input"
-                value={empId}
+                value={clientId}
+                onChange={this.getEmpId}
               />
             </div>
             <div className="label-name-container">
@@ -189,12 +159,12 @@ class EditStaff extends Component {
               />
             </div>
             <div className="label-name-container">
-              <label htmlFor="description" className="name-label">
+              <label htmlFor="empId" className="name-label">
                 Description:
               </label>
               <br />
               <input
-                id="description"
+                id="empId"
                 type="text"
                 placeholder="Description"
                 className="name-input"
@@ -217,12 +187,8 @@ class EditStaff extends Component {
               />
             </div>
             {isShowError && <p className="error-msg">* Fill The All Fields</p>}
-            <button
-              className="add-button"
-              type="submit"
-              onClick={this.addStaff}
-            >
-              Save Changes
+            <button className="add-button" type="submit">
+              Add
             </button>
           </form>
         </div>
@@ -231,4 +197,4 @@ class EditStaff extends Component {
   }
 }
 
-export default EditStaff
+export default AddStaff

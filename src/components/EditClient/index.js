@@ -2,28 +2,28 @@ import {Component} from 'react'
 import Header from '../Header'
 import './index.css'
 
-class EditStaff extends Component {
+class EditClient extends Component {
   state = {
     name: '',
     email: '',
     mobile: '',
-    empId: '',
+    clientId: '',
     description: '',
     address: '',
     isShowError: false,
   }
 
   componentDidMount() {
-    this.getEmployeeDetails()
+    this.getClientsDetails()
   }
 
-  getEmployeeDetails = async () => {
+  getClientsDetails = async () => {
     const {match} = this.props
     const {params} = match
     const {id} = params
-    console.log(params)
+    console.log(id)
     const projectsResponce = await fetch(
-      `http://localhost:8005/staffdata/${id}`,
+      `http://localhost:8005/clientsdata/${id}`,
       {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
@@ -33,7 +33,7 @@ class EditStaff extends Component {
     if (projectsResponce.ok) {
       const data = await projectsResponce.json()
       this.setState({
-        empId: data.empId,
+        clientId: data.clientId,
         name: data.name,
         email: data.email,
         mobile: data.mobile,
@@ -67,50 +67,53 @@ class EditStaff extends Component {
     const {match} = this.props
     const {params} = match
     const {id} = params
-    this.setState({empId: id})
+    this.setState({clientId: id})
   }
 
   addStaff = async event => {
     event.preventDefault()
-    const {name, email, empId, description, mobile, address} = this.state
+    const {name, email, clientId, description, mobile, address} = this.state
     if (
       name === '' ||
       email === '' ||
-      empId === '' ||
+      clientId === '' ||
       description === '' ||
       mobile === ''
     ) {
       this.setState({isShowError: true})
     } else {
-      const res = await fetch(`http://localhost:8005/updatestaff/${empId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetch(
+        `http://localhost:8005/updateclient/${clientId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            mobile,
+            description,
+            address,
+          }),
         },
-        body: JSON.stringify({
-          name,
-          email,
-          mobile,
-          description,
-          address,
-        }),
-      })
+      )
 
       console.log(res.ok)
 
       if (res.ok) {
         alert('Successfully edited')
         const {history} = this.props
-        history.replace('/staff')
+        history.replace('/clients')
       } else {
-        alert('Something Went Wrong...')
+        alert('Something Went Wrong')
       }
       this.setState({
         name: '',
         email: '',
         mobile: '',
         description: '',
-        empId: '',
+        clientId: '',
         address: '',
         isShowError: '',
       })
@@ -122,7 +125,7 @@ class EditStaff extends Component {
       name,
       email,
       mobile,
-      empId,
+      clientId,
       description,
       isShowError,
       address,
@@ -132,18 +135,18 @@ class EditStaff extends Component {
         <Header />
         <div className="staff-container">
           <form onSubmit={this.addStaff}>
-            <h1>Edit Staff</h1>
+            <h1>Edit Client</h1>
             <div className="label-name-container">
               <label htmlFor="empId" className="name-label">
-                Employee Id:
+                Client Id:
               </label>
               <br />
               <input
                 id="empId"
                 type="text"
-                placeholder="EmpId"
+                placeholder="ClientId"
                 className="name-input"
-                value={empId}
+                value={clientId}
               />
             </div>
             <div className="label-name-container">
@@ -231,4 +234,4 @@ class EditStaff extends Component {
   }
 }
 
-export default EditStaff
+export default EditClient

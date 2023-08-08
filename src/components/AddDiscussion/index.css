@@ -1,0 +1,51 @@
+.projects-header-main-container {
+  display: flex;
+  flex-direction: row;
+}
+.add-project-container {
+  margin-left: 100px;
+  width: 100%;
+  margin-top: 30px;
+}
+.add-project-text {
+  font-size: 20px;
+}
+.select-elements-container {
+  display: flex;
+
+  flex-direction: row;
+}
+.name-select-element-container {
+  margin-right: 10px;
+}
+.select-element {
+  width: 150px;
+  border-radius: 2px;
+  padding: 10px;
+}
+.option-element {
+  font-family: 'Roboto';
+  font-size: 13px;
+}
+.add-project-button {
+  background-color: #0b69ff;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 7px;
+  margin-top: 50px;
+}
+.project-name-description-container {
+  margin-top: 20px;
+}
+.project-name {
+  border-radius: 3px;
+  padding: 5px;
+  margin-bottom: 5px;
+  width: 30%;
+}
+.project-description {
+  border-radius: 3px;
+  padding: 5px;
+  margin-bottom: 3px;
+}

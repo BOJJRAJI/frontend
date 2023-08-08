@@ -9,6 +9,7 @@ class AddStaff extends Component {
     mobile: '',
     empId: '',
     description: '',
+    address: '',
     isShowError: false,
   }
 
@@ -24,6 +25,10 @@ class AddStaff extends Component {
     this.setState({mobile: event.target.value})
   }
 
+  getAddress = event => {
+    this.setState({address: event.target.value})
+  }
+
   getDescription = event => {
     this.setState({description: event.target.value})
   }
@@ -32,46 +37,70 @@ class AddStaff extends Component {
     this.setState({empId: event.target.value})
   }
 
-  addStaff = () => {
-    const {name, email, empId, description, mobile} = this.state
-
+  addStaff = async event => {
+    event.preventDefault()
+    const {name, email, empId, description, mobile, address} = this.state
     if (
       name === '' ||
       email === '' ||
       empId === '' ||
       description === '' ||
-      mobile === ''
+      mobile === '' ||
+      address === ''
     ) {
       this.setState({isShowError: true})
     } else {
-      const staffDetails = {
-        name,
-        email,
-        empId,
-        description,
-        mobile,
+      const res = await fetch('http://localhost:8005/addstaff', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          empId,
+          description,
+          mobile,
+          address,
+        }),
+      })
+      if (res.ok) {
+        alert('Successfully Added')
+        const {history} = this.props
+        history.replace('/staff')
+      } else {
+        alert('Somthing Went Wrong .. Try Again')
       }
-      console.log(staffDetails)
+
       this.setState({
         name: '',
         email: '',
         mobile: '',
         description: '',
         empId: '',
+        address: '',
         isShowError: '',
       })
     }
   }
 
   render() {
-    const {name, email, mobile, empId, description, isShowError} = this.state
+    const {
+      name,
+      email,
+      mobile,
+      empId,
+      description,
+      isShowError,
+      address,
+    } = this.state
 
     return (
       <div className="staff-header-container">
         <Header />
         <div className="staff-container">
-          <form>
-            <h1>Add Staff</h1>
+          <form onSubmit={this.addStaff}>
+            <h1 className="project-edit-heading">Add Staff</h1>
             <div className="label-name-container">
               <label htmlFor="empId" className="name-label">
                 Employee Id:
@@ -122,7 +151,7 @@ class AddStaff extends Component {
               <input
                 id="mobile"
                 type="text"
-                placeholder="EmpId"
+                placeholder="Mobile"
                 className="name-input"
                 value={mobile}
                 onChange={this.getMobile}
@@ -142,12 +171,22 @@ class AddStaff extends Component {
                 onChange={this.getDescription}
               />
             </div>
+            <div className="label-name-container">
+              <label htmlFor="Address" className="name-label">
+                Address:
+              </label>
+              <br />
+              <input
+                id="Address"
+                type="text"
+                placeholder="Address"
+                className="name-input"
+                value={address}
+                onChange={this.getAddress}
+              />
+            </div>
             {isShowError && <p className="error-msg">* Fill The All Fields</p>}
-            <button
-              className="add-button"
-              type="button"
-              onClick={this.addStaff}
-            >
+            <button className="add-button" type="submit">
               Add
             </button>
           </form>

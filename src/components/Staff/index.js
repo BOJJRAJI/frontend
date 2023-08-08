@@ -1,27 +1,12 @@
 import {Component} from 'react'
+import {Link} from 'react-router-dom'
+import Loader from 'react-loader-spinner'
 import Header from '../Header'
-
 import './index.css'
-
-const initialStaffDetails = [
-  {
-    empId: 1,
-    name: 'Vishal',
-    email: 'vishal@gmail.com',
-    mobile: '954125651',
-    description: 'Software Developer',
-  },
-  {
-    empId: 1,
-    name: 'Raji',
-    email: 'raji@gmail.com',
-    mobile: '954126543',
-    description: 'Software Developer Intern',
-  },
-]
 
 const apiStatusConstants = {
   initial: 'INITIAL',
+  empty: 'EMPTY',
   success: 'SUCCESS',
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
@@ -34,11 +19,30 @@ class Staff extends Component {
     this.getStaffDetails()
   }
 
-  getStaffDetails = () => {
-    this.setState({
-      staffDetails: initialStaffDetails,
-      apiStatus: apiStatusConstants.success,
+  getStaffDetails = async () => {
+    this.setState({apiStatus: apiStatusConstants.inProgress})
+    const res = await fetch('http://localhost:8005/staffdata', {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
     })
+    console.log(res)
+    if (res.ok) {
+      const data = await res.json()
+      if (data.length === 0) {
+        this.setState({
+          apiStatus: apiStatusConstants.empty,
+        })
+      } else {
+        this.setState({
+          staffDetails: data,
+          apiStatus: apiStatusConstants.success,
+        })
+      }
+    } else {
+      this.setState({
+        apiStatus: apiStatusConstants.failure,
+      })
+    }
   }
 
   renderStaffListView = () => {
@@ -56,33 +60,42 @@ class Staff extends Component {
         </div>
         <table className="table">
           <thead>
-            <tr className="table-dark">
-              <th scope="col">EmpId</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Mobile</th>
-              <th scope="col">Description</th>
+            <tr className="table-row">
+              <th scope="col" className="table-row-content-id">
+                EmpId
+              </th>
+              <th scope="col" className="table-row-content">
+                Name
+              </th>
+              <th scope="col" className="table-row-content">
+                Email
+              </th>
+              <th scope="col" className="table-row-content">
+                Mobile
+              </th>
+              <th scope="col" className="table-row-content">
+                Description
+              </th>
             </tr>
           </thead>
           <tbody>
             {staffDetails.map(element => (
               <>
-                <tr>
+                <tr key={element.empId}>
                   <th scope="row" className="td">
                     {element.empId}
                   </th>
-                  <td className="td">{element.name}</td>
-                  <td className="td">{element.email}</td>
-                  <td className="td">{element.mobile}</td>
-                  <td className="td">{element.description}</td>
+                  <td className="table-column">{element.name}</td>
+                  <td className="table-column">{element.email}</td>
+                  <td className="table-column">{element.mobile}</td>
+                  <td className="table-column">{element.description}</td>
+                  <td className="table-column">{element.address}</td>
                   <td className="edit-button-container">
-                    <button
-                      className="edit-button"
-                      type="button"
-                      onClick={this.editStaff}
-                    >
-                      Edit
-                    </button>
+                    <Link to={`/editstaff/${element.empId}`}>
+                      <button className="edit-button" type="button">
+                        Edit
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               </>
@@ -91,11 +104,6 @@ class Staff extends Component {
         </table>
       </div>
     )
-  }
-
-  editStaff = () => {
-    const {history} = this.props
-    history.replace('/editstaff')
   }
 
   renderFailureView = () => (
@@ -112,6 +120,12 @@ class Staff extends Component {
     </div>
   )
 
+  renderLoadingView = () => (
+    <div className="products-loader-container">
+      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+    </div>
+  )
+
   renderStaffView = () => {
     const {apiStatus} = this.state
 
@@ -120,7 +134,10 @@ class Staff extends Component {
         return this.renderStaffListView()
       case apiStatusConstants.failure:
         return this.renderFailureView()
-
+      case apiStatusConstants.inProgress:
+        return this.renderLoadingView()
+      case apiStatusConstants.empty:
+        return this.renderNoStaffView()
       default:
         return null
     }
@@ -145,14 +162,10 @@ class Staff extends Component {
   )
 
   render() {
-    const {staffDetails} = this.state
     return (
       <div className="staff-header-main-container">
         <Header />
-
-        {staffDetails.length === 0
-          ? this.renderNoStaffView()
-          : this.renderStaffView()}
+        {this.renderStaffView()}
       </div>
     )
   }
